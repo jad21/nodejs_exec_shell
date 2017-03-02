@@ -27,7 +27,7 @@ program.version('0.0.1')
 /**
  * 	 List langs
  */
-program.command('list ').description('list all langs').option("-l, --like [like]", "coincidencia como en mysql").action(function(options) {
+program.command('list ').description('list all langs').option("-l, --like [like]", "Coincidence as in MySQL").action(function(options) {
     sql = 'SELECT * FROM langs';
     if (options.like) {
         sql += ' WHERE name like ?';
