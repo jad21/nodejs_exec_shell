@@ -123,5 +123,8 @@ program
 /**
  * 	 run
  */
+if (process.argv.length == 2) {
+	process.argv.push("--help")
+}
 program
 	.parse(process.argv);
