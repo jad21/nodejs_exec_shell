@@ -1,5 +1,5 @@
 # nodejs_exec_shell
 # install
-'''bash
+```bash
 $ npm install 
-'''
+```
