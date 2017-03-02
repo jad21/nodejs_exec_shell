@@ -99,7 +99,7 @@ program
  */
 program
 	.command('create_database')
-	.description('create langs')
+	.description('create database')
 	.action(function(options) {
 	    fs.readFile("database.sql", "utf8", function(err, data){
 	    	if (err) throw err;
