@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "mysql": "*",
+    "commander": "*"
+  },
+  "description": "",
+  "version": "0.0.1"
+}
