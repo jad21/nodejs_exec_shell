@@ -15,13 +15,23 @@ var fs = require('fs');
 /**
  * 	 init conn db
  */
-var connection = mysql.createConnection({
-	multipleStatements: true,
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'test_shell_cli_nodejs'
-});
+var connection = null;
+
+var createConnection = function(no_database){
+	if (!connection) {
+		var details_db = {
+			multipleStatements: true,
+		    host: 'localhost',
+		    user: 'root',
+		    password: 'root',
+		};
+		if (!no_database) {
+			details_db.database = 'test_shell_cli_nodejs';
+		}
+		connection = mysql.createConnection(details_db);
+	}
+	return connection;
+}
 program.version('0.0.1')
 
 /**
@@ -34,10 +44,11 @@ program.command('list ').description('list all langs').option("-l, --like [like]
         sql = mysql.format(sql, [options.like]);
         console.log(sql)
     }
+    createConnection()
     connection.connect();
     connection.query(sql, function(error, results, fields) {
         if (error) throw error;
-        console.log('List langs ' + (options.like ? "like " + options.like : "") + ":");
+        console.log('List langs' + (options.like ? " like " + options.like : "") + ":");
         for (var i in results) {
             console.log("name: %s create: %s", results[i].name, results[i].date_created);
         }
@@ -48,8 +59,9 @@ program.command('list ').description('list all langs').option("-l, --like [like]
  * 	 create lang
  */
 program.command('create <name>').description('create langs').action(function(name, options) {
+    createConnection()
     connection.connect();
-    connection.query('INSERT INTO langs (name) values(?)', [name], function(error, results, fields) {
+    connection.query('INSERT IGNORE INTO langs (name) values(?)', [name], function(error, results, fields) {
         if (error) throw error;
         console.log("create lang %s succesfull", name);
     });
@@ -63,6 +75,7 @@ program.command('create_database').description('create langs').action(function(n
     fs.readFile("database.sql", "utf8", function(err, data){
     	if (err) throw err;
     	// console.log(data)
+    	createConnection(true)
 	    connection.connect();
 	    connection.query(data, function(error, results, fields) {
 	        if (error) throw error;
